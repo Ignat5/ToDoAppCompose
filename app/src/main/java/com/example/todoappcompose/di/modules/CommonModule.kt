@@ -1,12 +1,13 @@
 package com.example.todoappcompose.di.modules
 
 import android.content.Context
-import androidx.datastore.preferences.preferencesDataStore
 import androidx.room.Room
 import com.example.todoappcompose.data.db.dao.TasksDao
 import com.example.todoappcompose.data.db.database.AppDatabase
-import com.example.todoappcompose.data.repositories.TasksRepository
-import com.example.todoappcompose.data.repositories.TasksRepositoryImpl
+import com.example.todoappcompose.data.repositories.local.LocalStoreRepository
+import com.example.todoappcompose.data.repositories.local.LocalStoreRepositoryImpl
+import com.example.todoappcompose.data.repositories.tasks.TasksRepository
+import com.example.todoappcompose.data.repositories.tasks.TasksRepositoryImpl
 import com.example.todoappcompose.util.AppConstants
 import dagger.Module
 import dagger.Provides
@@ -18,6 +19,12 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 object CommonModule {
+
+    @Singleton
+    @Provides
+    fun provideLocalStoreRepository(@ApplicationContext applicationContent: Context): LocalStoreRepository {
+        return LocalStoreRepositoryImpl(applicationContent)
+    }
 
     @Singleton
     @Provides

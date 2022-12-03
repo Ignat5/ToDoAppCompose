@@ -12,6 +12,7 @@ import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -19,17 +20,26 @@ import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.todoappcompose.R
 import com.example.todoappcompose.data.db.entities.TaskEntity
-import java.util.logging.Filter
+import com.example.todoappcompose.data.repositories.local.FilterOptions
 
 @OptIn(ExperimentalLifecycleComposeApi::class)
 @Composable
 fun AllTasksScreen(
     viewModel: AllTasksViewModel = hiltViewModel<AllTasksViewModel>()
 ) {
+    val uiState = viewModel.uiState.collectAsStateWithLifecycle()
     Scaffold(
         scaffoldState = rememberScaffoldState(),
         topBar = {
-            AllTasksAppBar()
+            AllTasksAppBar(
+                onFilterOptionClicked = { filterOption ->
+                    viewModel.onFilterOptionClick(filterOption)
+                },
+                onClearCompletedTasks = {
+                    viewModel.onClearCompletedTasksClick()
+                },
+                filterOption = uiState.value.filterOptions
+            )
         },
         floatingActionButton = {
             AddTaskFloatingActionButton({
@@ -37,42 +47,86 @@ fun AllTasksScreen(
             })
         }
     ) { paddingValues ->
-        val uiState = viewModel.uiState.collectAsStateWithLifecycle()
         AllTasksContent(
             todoList = uiState.value.todos,
+            filterOption = uiState.value.filterOptions,
+            onCompleteChange = { task ->
+                viewModel.onTaskIsDoneUndoneClick(task)
+            },
             modifier = Modifier.padding(paddingValues)
         )
     }
 }
 
-data class TestItem(
-    val id: Int,
-    val title: String,
-    val isCompleted: Boolean
-)
+@Composable
+fun AllTasksContent(
+    todoList: List<TaskEntity>,
+    filterOption: FilterOptions,
+    onCompleteChange: (task: TaskEntity) -> Unit,
+    modifier: Modifier = Modifier
+) {
+    if (todoList.isNotEmpty()) {
+        TasksContent(
+            todoList,
+            filterOption,
+            onCompleteChange,
+            modifier
+        )
+    } else {
+        NoTasksContent(filterOption = filterOption)
+    }
+}
 
 @Composable
-fun AllTasksContent(todoList: List<TaskEntity>, modifier: Modifier = Modifier) {
+fun NoTasksContent(
+    filterOption: FilterOptions,
+    modifier: Modifier = Modifier
+) {
+    Column(
+        modifier = modifier.fillMaxSize(),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Text(
+            text = when (filterOption) {
+                FilterOptions.ALL -> "You have no tasks!"
+                FilterOptions.ACTIVE -> "You have no active tasks!"
+                FilterOptions.COMPLETED -> "You have no completed tasks!"
+            },
+            style = MaterialTheme.typography.h5
+        )
+    }
+}
+
+@Composable
+fun TasksContent(
+    todoList: List<TaskEntity>,
+    filterOption: FilterOptions,
+    onCompleteChange: (task: TaskEntity) -> Unit,
+    modifier: Modifier = Modifier
+) {
     Column(modifier = modifier) {
         Column(
             modifier = Modifier.padding(vertical = 16.dp)
         ) {
             Text(
-                text = "All tasks",
+                text = when (filterOption) {
+                    FilterOptions.ALL -> "All tasks"
+                    FilterOptions.ACTIVE -> "Active tasks"
+                    FilterOptions.COMPLETED -> "Completed tasks"
+                },
                 style = MaterialTheme.typography.h6,
                 modifier = Modifier.padding(start = 16.dp)
             )
             Divider()
         }
-        LazyColumn() {
-            items(todoList) { item ->
-                TaskItem(
-                    id = item.taskId,
-                    title = item.taskName,
-                    isCompleted = item.isDone,
-                    onCompleteChange = { id, isChecked ->
+        LazyColumn(
 
-                    },
+        ) {
+            items(todoList, key = {task -> task.taskId}) { item ->
+                TaskItem(
+                    item,
+                    onCompleteChange = onCompleteChange,
                     onTaskClicked = { id ->
 
                     }
@@ -84,33 +138,36 @@ fun AllTasksContent(todoList: List<TaskEntity>, modifier: Modifier = Modifier) {
 
 @Composable
 fun TaskItem(
-    id: String,
-    title: String,
-    isCompleted: Boolean,
-    onCompleteChange: (id: String, isChecked: Boolean) -> Unit,
+    task: TaskEntity,
+    onCompleteChange: (task: TaskEntity) -> Unit,
     onTaskClicked: (id: String) -> Unit
 ) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
             .clickable {
-                onTaskClicked(id)
+                onTaskClicked(task.taskId)
             },
         verticalAlignment = Alignment.CenterVertically
     ) {
         Checkbox(
-            checked = isCompleted,
-            onCheckedChange = { isChecked ->
-                onCompleteChange(id, isChecked)
+            checked = task.isDone,
+            onCheckedChange = {
+                onCompleteChange(task)
             },
             modifier = Modifier.padding(8.dp)
         )
-        Text(text = title)
+        Text(text = task.taskName)
     }
 }
 
 @Composable
-fun AllTasksAppBar(modifier: Modifier = Modifier) {
+fun AllTasksAppBar(
+    onFilterOptionClicked: (filterOption: FilterOptions) -> Unit,
+    onClearCompletedTasks: () -> Unit,
+    filterOption: FilterOptions,
+    modifier: Modifier = Modifier
+) {
     TopAppBar(
         title = {
             Text(text = "Todo")
@@ -121,10 +178,15 @@ fun AllTasksAppBar(modifier: Modifier = Modifier) {
             }
         },
         actions = {
-            FilterMenuItem()
-            MoreMenuItem()
+            FilterMenuItem(
+                onFilterOptionClicked = onFilterOptionClicked,
+                filterOption = filterOption
+            )
+            MoreMenuItem(
+                onClearCompletedTasks = onClearCompletedTasks
+            )
         },
-        modifier = Modifier
+        modifier = modifier
     )
 }
 
@@ -156,11 +218,17 @@ fun MoreMenuItem(
     }
 }
 
+private fun getMenuItemAlphaByFilter(
+    currentFilterOptions: FilterOptions,
+    itemFilterOptions: FilterOptions
+): Float =
+    if (currentFilterOptions == itemFilterOptions) 1.0f else 0.5f
+
+
 @Composable
 fun FilterMenuItem(
-    onFilterAllTasks: () -> Unit = {},
-    onFilterActive: () -> Unit = {},
-    onFilterCompleted: () -> Unit = {},
+    filterOption: FilterOptions,
+    onFilterOptionClicked: (filterOption: FilterOptions) -> Unit
 ) {
     var isMenuExpanded by remember {
         mutableStateOf(false)
@@ -175,25 +243,55 @@ fun FilterMenuItem(
         onHideMenu = {
             isMenuExpanded = false
         },
-        isMenuExpanded = isMenuExpanded
+        isMenuExpanded = isMenuExpanded,
     ) {
-        DropdownMenuItem(onClick = {
-            onFilterAllTasks()
-            isMenuExpanded = false
-        }) {
-            Text(text = "All")
+        DropdownMenuItem(
+            onClick = {
+                onFilterOptionClicked(FilterOptions.ALL)
+                isMenuExpanded = false
+            },
+        ) {
+            Text(
+                text = "All",
+                modifier = Modifier.alpha(
+                    getMenuItemAlphaByFilter(
+                        currentFilterOptions = filterOption,
+                        itemFilterOptions = FilterOptions.ALL
+                    )
+                )
+            )
         }
-        DropdownMenuItem(onClick = {
-            onFilterActive()
-            isMenuExpanded = false
-        }) {
-            Text(text = "Active")
+        DropdownMenuItem(
+            onClick = {
+                onFilterOptionClicked(FilterOptions.ACTIVE)
+                isMenuExpanded = false
+            }
+        ) {
+            Text(
+                text = "Active",
+                modifier = Modifier.alpha(
+                    getMenuItemAlphaByFilter(
+                        currentFilterOptions = filterOption,
+                        itemFilterOptions = FilterOptions.ACTIVE
+                    )
+                )
+            )
         }
-        DropdownMenuItem(onClick = {
-            onFilterCompleted()
-            isMenuExpanded = false
-        }) {
-            Text(text = "Completed")
+        DropdownMenuItem(
+            onClick = {
+                onFilterOptionClicked(FilterOptions.COMPLETED)
+                isMenuExpanded = false
+            }
+        ) {
+            Text(
+                text = "Completed",
+                modifier = Modifier.alpha(
+                    getMenuItemAlphaByFilter(
+                        currentFilterOptions = filterOption,
+                        itemFilterOptions = FilterOptions.COMPLETED
+                    )
+                )
+            )
         }
     }
 }
@@ -204,6 +302,7 @@ fun TopAppBarMenuItem(
     isMenuExpanded: Boolean,
     onShowMenu: () -> Unit,
     onHideMenu: () -> Unit,
+    modifier: Modifier = Modifier,
     menuContent: @Composable ColumnScope.() -> Unit,
 ) {
     Box(modifier = Modifier.wrapContentSize(Alignment.TopEnd)) {
@@ -213,7 +312,8 @@ fun TopAppBarMenuItem(
         DropdownMenu(
             expanded = isMenuExpanded,
             onDismissRequest = { onHideMenu() },
-            modifier = Modifier.wrapContentSize(Alignment.TopEnd)
+            modifier = modifier
+                .wrapContentSize(Alignment.TopEnd)
         ) {
             menuContent()
         }
