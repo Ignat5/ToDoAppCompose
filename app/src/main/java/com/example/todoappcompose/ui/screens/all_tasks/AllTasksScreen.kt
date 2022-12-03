@@ -25,6 +25,7 @@ import com.example.todoappcompose.data.repositories.local.FilterOptions
 @OptIn(ExperimentalLifecycleComposeApi::class)
 @Composable
 fun AllTasksScreen(
+    onTaskClicked: (taskId: String) -> Unit,
     viewModel: AllTasksViewModel = hiltViewModel<AllTasksViewModel>()
 ) {
     val uiState = viewModel.uiState.collectAsStateWithLifecycle()
@@ -53,6 +54,7 @@ fun AllTasksScreen(
             onCompleteChange = { task ->
                 viewModel.onTaskIsDoneUndoneClick(task)
             },
+            onTaskClicked = onTaskClicked,
             modifier = Modifier.padding(paddingValues)
         )
     }
@@ -63,6 +65,7 @@ fun AllTasksContent(
     todoList: List<TaskEntity>,
     filterOption: FilterOptions,
     onCompleteChange: (task: TaskEntity) -> Unit,
+    onTaskClicked: (taskId: String) -> Unit,
     modifier: Modifier = Modifier
 ) {
     if (todoList.isNotEmpty()) {
@@ -70,6 +73,7 @@ fun AllTasksContent(
             todoList,
             filterOption,
             onCompleteChange,
+            onTaskClicked = onTaskClicked,
             modifier
         )
     } else {
@@ -103,6 +107,7 @@ fun TasksContent(
     todoList: List<TaskEntity>,
     filterOption: FilterOptions,
     onCompleteChange: (task: TaskEntity) -> Unit,
+    onTaskClicked: (taskId: String) -> Unit,
     modifier: Modifier = Modifier
 ) {
     Column(modifier = modifier) {
@@ -127,9 +132,7 @@ fun TasksContent(
                 TaskItem(
                     item,
                     onCompleteChange = onCompleteChange,
-                    onTaskClicked = { id ->
-
-                    }
+                    onTaskClicked = onTaskClicked
                 )
             }
         }
@@ -140,7 +143,7 @@ fun TasksContent(
 fun TaskItem(
     task: TaskEntity,
     onCompleteChange: (task: TaskEntity) -> Unit,
-    onTaskClicked: (id: String) -> Unit
+    onTaskClicked: (taskId: String) -> Unit
 ) {
     Row(
         modifier = Modifier
