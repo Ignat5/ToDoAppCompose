@@ -11,5 +11,6 @@ object AppConstants {
 
     //DataStore
     const val DATA_STORE_NAME_V1 = "DATA_STORE_NAME_V1"
+    const val FILTER_OPTION_KEY = "FILTER_OPTION_KEY"
 
 }
