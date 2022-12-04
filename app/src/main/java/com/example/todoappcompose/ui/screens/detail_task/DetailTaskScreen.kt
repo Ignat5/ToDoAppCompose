@@ -5,10 +5,12 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.Edit
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
@@ -19,6 +21,7 @@ import com.example.todoappcompose.data.db.entities.TaskEntity
 @Composable
 fun DetailTaskScreen(
     onBackPressed: () -> Unit,
+    onEditClicked: (taskId: String) -> Unit,
     scaffoldState: ScaffoldState = rememberScaffoldState(),
     viewModel: DetailTaskViewModel = hiltViewModel()
 ) {
@@ -34,7 +37,13 @@ fun DetailTaskScreen(
             )
         },
         floatingActionButton = {
-
+            FloatingActionButton(onClick = {
+                uiState.value.currentTask?.let {
+                    onEditClicked(it.taskId)
+                }
+            }) {
+                Icon(Icons.Filled.Edit, "edit")
+            }
         }
     ) { paddingValues ->
         LaunchedEffect(uiState.value.shouldNavigateBack) {
@@ -131,12 +140,16 @@ fun DetailScreenContent(
         modifier = Modifier
             .fillMaxWidth()
             .padding(horizontal = 24.dp, vertical = 16.dp),
-        verticalAlignment = Alignment.Top
+        verticalAlignment = Alignment.CenterVertically
     ) {
         Checkbox(checked = task.isDone, onCheckedChange = { onCheckUncheckClick() })
         Column {
             Text(text = task.taskName)
-            Text(text = task.taskDescription)
+            if (task.taskDescription.isNotBlank())
+                Text(
+                    text = task.taskDescription,
+                    modifier = Modifier.alpha(0.7f)
+                )
         }
     }
 }

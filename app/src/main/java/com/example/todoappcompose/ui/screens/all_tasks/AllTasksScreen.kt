@@ -26,6 +26,7 @@ import com.example.todoappcompose.data.repositories.local.FilterOptions
 @Composable
 fun AllTasksScreen(
     onTaskClicked: (taskId: String) -> Unit,
+    onAddTaskClicked: () -> Unit,
     viewModel: AllTasksViewModel = hiltViewModel<AllTasksViewModel>()
 ) {
     val uiState = viewModel.uiState.collectAsStateWithLifecycle()
@@ -43,9 +44,9 @@ fun AllTasksScreen(
             )
         },
         floatingActionButton = {
-            AddTaskFloatingActionButton({
-                viewModel.addTestTask()
-            })
+            AddTaskFloatingActionButton(
+                onAddToDoClick = onAddTaskClicked
+            )
         }
     ) { paddingValues ->
         AllTasksContent(

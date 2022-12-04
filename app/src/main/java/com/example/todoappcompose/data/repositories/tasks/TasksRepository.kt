@@ -9,6 +9,8 @@ interface TasksRepository {
 
     fun getTaskFlowById(taskId: String): Flow<TaskEntity?>
 
+    suspend fun getTaskById(taskId: String): TaskEntity?
+
     suspend fun insertTask(task: TaskEntity)
 
     suspend fun updateTask(task: TaskEntity)
