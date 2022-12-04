@@ -60,17 +60,6 @@ class AllTasksViewModel @Inject constructor(
         }
     }
 
-    fun addTestTask() {
-        val task = TaskEntity(
-            taskName = "task + ${System.currentTimeMillis().toString()}",
-            taskDescription = "task descr task descr task descr task descr task descr task descr task descr task descr task descr task descr task descr task descr task descr task descr task descr",
-            isDone = false
-        )
-        viewModelScope.launch {
-            tasksRepository.insertTask(task)
-        }
-    }
-
 }
 
 data class AllTasksScreenState(

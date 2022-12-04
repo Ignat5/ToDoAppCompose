@@ -112,12 +112,12 @@ fun DrawerOption(
         Icon(
             painter = painterResource(id = iconResource),
             contentDescription = iconDescription,
-            tint = if (isCurrentOption) MaterialTheme.colors.primary else Color.Black.copy(alpha = 0.7f)
+            tint = if (isCurrentOption) MaterialTheme.colors.primary else MaterialTheme.colors.onBackground.copy(alpha = 0.7f)
         )
         Spacer(modifier = Modifier.padding(horizontal = 4.dp))
         Text(
             text = optionText,
-            color = if (isCurrentOption) MaterialTheme.colors.primary else Color.Black.copy(alpha = 0.7f)
+            color = if (isCurrentOption) MaterialTheme.colors.primary else MaterialTheme.colors.onBackground.copy(0.7f)
         )
     }
 }
