@@ -45,7 +45,11 @@ fun TodoAppScreen(
             ),
             deepLinks = emptyList()
         ) {
-            DetailTaskScreen()
+            DetailTaskScreen(
+                onBackPressed = {
+                    navigationManager.navigateBack()
+                }
+            )
         }
 
     }

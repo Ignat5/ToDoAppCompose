@@ -26,4 +26,8 @@ class TodoNavigationManager(private val navController: NavController) {
             route = "${DETAIL_TASK_SCREEN_DESTINATION}/$taskId"
         )
     }
+
+    fun navigateBack() {
+        navController.popBackStack()
+    }
 }

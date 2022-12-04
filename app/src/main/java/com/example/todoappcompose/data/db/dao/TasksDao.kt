@@ -1,6 +1,7 @@
 package com.example.todoappcompose.data.db.dao
 
 import androidx.room.Dao
+import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
@@ -26,6 +27,9 @@ interface TasksDao {
 
     @Update(onConflict = OnConflictStrategy.REPLACE)
     suspend fun updateTask(task: TaskEntity)
+
+    @Delete
+    suspend fun deleteTask(task: TaskEntity)
 
     @Query("DELETE FROM ${AppConstants.TASKS_TABLE} WHERE ${AppConstants.TASK_IS_DONE} = 1")
     suspend fun deleteCompletedTasks()
