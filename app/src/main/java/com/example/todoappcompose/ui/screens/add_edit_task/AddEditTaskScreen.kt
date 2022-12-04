@@ -22,11 +22,13 @@ fun AddEditTaskScreen(
     scaffoldState: ScaffoldState = rememberScaffoldState(),
     viewModel: AddEditTaskViewModel = hiltViewModel()
 ) {
+    val uiState = viewModel.uiState.collectAsState()
     Scaffold(
         scaffoldState = scaffoldState,
         topBar = {
             AddEditTopAppBar(
-                onBack = onBack
+                onBack = onBack,
+                isNewTask = uiState.value.currentTask == null
             )
         },
         floatingActionButton = {
@@ -35,7 +37,6 @@ fun AddEditTaskScreen(
             }
         }
     ) { paddingValues ->
-        val uiState = viewModel.uiState.collectAsState()
         LaunchedEffect(uiState.value.shouldNavigateBack) {
             if (uiState.value.shouldNavigateBack) {
                 onBack()
@@ -113,11 +114,12 @@ fun AddEditFloatingActionButton(
 
 @Composable
 fun AddEditTopAppBar(
-    onBack: () -> Unit
+    onBack: () -> Unit,
+    isNewTask: Boolean
 ) {
     TopAppBar(
         title = {
-            Text(text = "New Task")
+            Text(text = if (isNewTask) "New Task" else "Edit task")
         },
         navigationIcon = {
             IconButton(onClick = onBack) {
