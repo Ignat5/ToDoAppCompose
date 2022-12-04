@@ -11,6 +11,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.todoappcompose.ui.screens.all_tasks.AllTasksScreen
+import com.example.todoappcompose.ui.screens.app.TodoAppScreen
 import com.example.todoappcompose.ui.theme.ToDoAppComposeTheme
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -20,7 +21,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             ToDoAppComposeTheme {
-                AllTasksScreen()
+                TodoAppScreen()
             }
         }
     }
