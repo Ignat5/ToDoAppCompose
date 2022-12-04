@@ -11,6 +11,8 @@ class TasksRepositoryImpl(private val tasksDao: TasksDao): TasksRepository {
 
     override fun getTaskFlowById(taskId: String): Flow<TaskEntity?> = tasksDao.getTaskFlowById(taskId)
 
+    override suspend fun getTaskById(taskId: String): TaskEntity? = tasksDao.getTaskById(taskId)
+
     override suspend fun insertTask(task: TaskEntity) {
         tasksDao.insertTask(task)
     }

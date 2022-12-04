@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">ToDoApp(Compose)</string>
+    <string name="user_message_task_title_empty">Task has to have a title</string>
 </resources>
