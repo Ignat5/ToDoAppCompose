@@ -27,6 +27,7 @@ import com.example.todoappcompose.data.repositories.local.FilterOptions
 fun AllTasksScreen(
     onTaskClicked: (taskId: String) -> Unit,
     onAddTaskClicked: () -> Unit,
+    onDrawerClick: () -> Unit,
     viewModel: AllTasksViewModel = hiltViewModel<AllTasksViewModel>()
 ) {
     val uiState = viewModel.uiState.collectAsStateWithLifecycle()
@@ -40,6 +41,7 @@ fun AllTasksScreen(
                 onClearCompletedTasks = {
                     viewModel.onClearCompletedTasksClick()
                 },
+                onDrawerClick = onDrawerClick,
                 filterOption = uiState.value.filterOptions
             )
         },
@@ -169,6 +171,7 @@ fun TaskItem(
 fun AllTasksAppBar(
     onFilterOptionClicked: (filterOption: FilterOptions) -> Unit,
     onClearCompletedTasks: () -> Unit,
+    onDrawerClick: () -> Unit,
     filterOption: FilterOptions,
     modifier: Modifier = Modifier
 ) {
@@ -177,7 +180,7 @@ fun AllTasksAppBar(
             Text(text = "Todo")
         },
         navigationIcon = {
-            IconButton(onClick = { /*TODO*/ }) {
+            IconButton(onClick = onDrawerClick) {
                 Icon(imageVector = Icons.Filled.Menu, contentDescription = "menu")
             }
         },
