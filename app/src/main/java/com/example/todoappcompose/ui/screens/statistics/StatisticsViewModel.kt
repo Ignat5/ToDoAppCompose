@@ -1,9 +1,9 @@
 package com.example.todoappcompose.ui.screens.statistics
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.todoappcompose.data.repositories.tasks.TasksRepository
+import com.example.todoappcompose.util.Utils
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -16,22 +16,11 @@ class StatisticsViewModel @Inject constructor(
     private val repository: TasksRepository
 ) : ViewModel() {
     val uiState: StateFlow<StatisticsScreenState> = repository.getAllTasksFlow().map { allTasks ->
-        val allCount = allTasks.count()
-        val activeCount = allTasks.count {
-            !it.isDone
-        }
-        if (allCount == 0) {
-            StatisticsScreenState()
-        } else {
-            val activePercent: Float = (activeCount.toFloat() / allCount.toFloat()) * 100
-            val completed = allCount - activeCount
-            Log.d("myTag", "allCount: $allCount, activeCount: $activeCount, completed: $completed")
-            val completedPercent: Float = (completed.toFloat() / allCount.toFloat()) * 100
-            StatisticsScreenState(
-                activeTasksStatistics = activePercent,
-                completedTasksStatistics = completedPercent
-            )
-        }
+        val statisticsModel = Utils.calculateTasksStatistics(tasks = allTasks)
+        StatisticsScreenState(
+            activeTasksStatistics = statisticsModel.activeTasksPercent,
+            completedTasksStatistics = statisticsModel.completedTasksPercent
+        )
     }.stateIn(
         scope = viewModelScope,
         started = SharingStarted.WhileSubscribed(5_000),
@@ -40,6 +29,6 @@ class StatisticsViewModel @Inject constructor(
 }
 
 data class StatisticsScreenState(
-    val activeTasksStatistics: Float = 0.0f,
-    val completedTasksStatistics: Float = 0.0f
+    val activeTasksStatistics: Float = 0f,
+    val completedTasksStatistics: Float = 0f
 )

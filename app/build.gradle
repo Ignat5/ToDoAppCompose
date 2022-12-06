@@ -58,8 +58,10 @@ dependencies {
     implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.3.1'
     implementation 'androidx.compose.material:material:1.1.1'
     testImplementation 'junit:junit:4.13.2'
-    androidTestImplementation 'androidx.test.ext:junit:1.1.4'
+//    testImplementation 'org.junit.jupiter:junit-jupiter'
+//    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.0'
+    testImplementation "org.hamcrest:hamcrest-all:$hamcrestVersion"
 
     // Jetpack Compose
     implementation "androidx.activity:activity-compose:$activityComposeVersion"
@@ -91,4 +93,5 @@ dependencies {
 
     //data store
     implementation("androidx.datastore:datastore-preferences:1.0.0")
+
 }
