@@ -58,10 +58,15 @@ dependencies {
     implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.3.1'
     implementation 'androidx.compose.material:material:1.1.1'
     testImplementation 'junit:junit:4.13.2'
-//    testImplementation 'org.junit.jupiter:junit-jupiter'
-//    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.0'
     testImplementation "org.hamcrest:hamcrest-all:$hamcrestVersion"
+    // AndroidX Test - JVM testing
+    testImplementation "androidx.test.ext:junit-ktx:$androidXTestExtKotlinRunnerVersion"
+    testImplementation "androidx.test:core-ktx:$androidXTestCoreVersion"
+    testImplementation "org.robolectric:robolectric:$robolectricVersion"
+    testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutinesVersion"
+    //Truth
+    testImplementation "com.google.truth:truth:$truthVersion"
 
     // Jetpack Compose
     implementation "androidx.activity:activity-compose:$activityComposeVersion"
