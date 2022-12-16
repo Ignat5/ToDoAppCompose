@@ -4,7 +4,7 @@ import com.example.todoappcompose.data.db.entities.TaskEntity
 import com.example.todoappcompose.data.repositories.tasks.TasksRepository
 import kotlinx.coroutines.flow.*
 
-class FakeRepository : TasksRepository {
+class FakeTasksRepository : TasksRepository {
 
     private val _currentTasksState: MutableStateFlow<LinkedHashMap<String, TaskEntity>> =
         MutableStateFlow(LinkedHashMap())

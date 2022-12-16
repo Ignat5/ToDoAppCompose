@@ -1,7 +1,7 @@
 package com.example.todoappcompose.unit_tests.detail_task
 
 import androidx.lifecycle.SavedStateHandle
-import com.example.todoappcompose.common.repository.FakeRepository
+import com.example.todoappcompose.common.repository.FakeTasksRepository
 import com.example.todoappcompose.data.db.entities.TaskEntity
 import com.example.todoappcompose.data.repositories.tasks.TasksRepository
 import com.example.todoappcompose.rules.SetMainDispatcherRule
@@ -11,9 +11,7 @@ import com.google.common.truth.Truth.assertThat
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Rule
@@ -43,7 +41,7 @@ class DetailTaskViewModelTest {
 
     @Before
     fun setUp() = runTest {
-        repository = FakeRepository()
+        repository = FakeTasksRepository()
         repository.insertTask(testTask)
         detailTaskViewModel = DetailTaskViewModel(
             repository,

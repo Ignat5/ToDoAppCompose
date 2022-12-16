@@ -1,7 +1,7 @@
 package com.example.todoappcompose.unit_tests.add_edit_task
 
 import androidx.lifecycle.SavedStateHandle
-import com.example.todoappcompose.common.repository.FakeRepository
+import com.example.todoappcompose.common.repository.FakeTasksRepository
 import com.example.todoappcompose.data.db.entities.TaskEntity
 import com.example.todoappcompose.rules.SetMainDispatcherRule
 import com.example.todoappcompose.ui.navigation.NavArg
@@ -25,7 +25,7 @@ class AddEditTaskViewModelTest {
     val setMainDispatcherRule: SetMainDispatcherRule = SetMainDispatcherRule()
 
     private lateinit var addEditTaskViewModel: AddEditTaskViewModel
-    private lateinit var repository: FakeRepository
+    private lateinit var repository: FakeTasksRepository
 
     private val testTask1 = TaskEntity(
         taskId = TEST_ARG_TASK_ID,
@@ -36,7 +36,7 @@ class AddEditTaskViewModelTest {
 
     @Before
     fun setUp() = runTest {
-        repository = FakeRepository()
+        repository = FakeTasksRepository()
         repository.insertTask(testTask1)
     }
 
