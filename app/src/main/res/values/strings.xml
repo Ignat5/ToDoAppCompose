@@ -4,4 +4,8 @@
     <string name="input_task_name_label">Title</string>
     <string name="input_task_description_label">Description</string>
     <string name="add_edit_task_done">Done</string>
+    <string name="detail_task_delete_task">Delete detail task</string>
+    <!-- common -->
+    <string name="common_yes_option">Yes</string>
+    <string name="common_no_option">No</string>
 </resources>

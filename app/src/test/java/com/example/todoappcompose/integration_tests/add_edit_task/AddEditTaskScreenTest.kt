@@ -30,9 +30,6 @@ import javax.inject.Inject
 @LooperMode(LooperMode.Mode.PAUSED)
 @TextLayoutMode(TextLayoutMode.Mode.REALISTIC)
 @HiltAndroidTest
-//@Config(
-//    application = HiltTestApplication::class,
-//)
 @Config(
     application = HiltTestApplication::class,
     instrumentedPackages =
