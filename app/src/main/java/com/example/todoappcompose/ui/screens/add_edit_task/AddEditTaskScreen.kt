@@ -1,10 +1,8 @@
 package com.example.todoappcompose.ui.screens.add_edit_task
 
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Done
 import androidx.compose.runtime.Composable
@@ -13,8 +11,11 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.example.todoappcompose.R
 
 @Composable
 fun AddEditTaskScreen(
@@ -84,9 +85,13 @@ fun AddEditScreenContent(
         OutlinedTextField(
             value = taskTitle,
             onValueChange = onTitleChange,
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .fillMaxWidth()
+                .semantics {
+                    contentDescription = "my content description"
+                },
             label = {
-                Text(text = "Title")
+                Text(text = stringResource(R.string.input_task_name_label))
             },
             maxLines = 2,
         )
@@ -96,7 +101,7 @@ fun AddEditScreenContent(
             onValueChange = onDescriptionChange,
             modifier = Modifier.fillMaxWidth(),
             label = {
-                Text(text = "Description")
+                Text(text = stringResource(id = R.string.input_task_description_label))
             },
             maxLines = 4
         )
@@ -108,7 +113,7 @@ fun AddEditFloatingActionButton(
     onAddEditClick: () -> Unit
 ) {
     FloatingActionButton(onClick = onAddEditClick) {
-        Icon(Icons.Filled.Done, "done")
+        Icon(Icons.Filled.Done, stringResource(R.string.add_edit_task_done))
     }
 }
 

@@ -1,4 +1,4 @@
-package com.example.todoappcompose
+package com.example.todoappcompose.unit_tests.utils
 
 import com.example.todoappcompose.data.db.entities.TaskEntity
 import com.example.todoappcompose.util.Utils

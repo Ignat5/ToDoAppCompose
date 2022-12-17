@@ -18,8 +18,7 @@ import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-object CommonModule {
-
+object RepositoryModule {
     @Singleton
     @Provides
     fun provideLocalStoreRepository(@ApplicationContext applicationContent: Context): LocalStoreRepository {
@@ -31,7 +30,11 @@ object CommonModule {
     fun provideTasksRepository(tasksDao: TasksDao): TasksRepository {
         return TasksRepositoryImpl(tasksDao)
     }
+}
 
+@Module
+@InstallIn(SingletonComponent::class)
+object DataSourceModule {
     @Singleton
     @Provides
     fun provideTasksDao(@ApplicationContext applicationContent: Context): TasksDao {
@@ -42,5 +45,33 @@ object CommonModule {
         ).build()
         return db.tasksDao()
     }
-
 }
+
+//@Module
+//@InstallIn(SingletonComponent::class)
+//object CommonModule {
+//
+//    @Singleton
+//    @Provides
+//    fun provideLocalStoreRepository(@ApplicationContext applicationContent: Context): LocalStoreRepository {
+//        return LocalStoreRepositoryImpl(applicationContent)
+//    }
+//
+//    @Singleton
+//    @Provides
+//    fun provideTasksRepository(tasksDao: TasksDao): TasksRepository {
+//        return TasksRepositoryImpl(tasksDao)
+//    }
+//
+//    @Singleton
+//    @Provides
+//    fun provideTasksDao(@ApplicationContext applicationContent: Context): TasksDao {
+//        val db = Room.databaseBuilder(
+//            applicationContent,
+//            AppDatabase::class.java,
+//            AppConstants.DATABASE_NAME
+//        ).build()
+//        return db.tasksDao()
+//    }
+//
+//}
