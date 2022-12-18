@@ -14,6 +14,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
@@ -96,9 +99,9 @@ fun NoTasksContent(
     ) {
         Text(
             text = when (filterOption) {
-                FilterOptions.ALL -> "You have no tasks!"
-                FilterOptions.ACTIVE -> "You have no active tasks!"
-                FilterOptions.COMPLETED -> "You have no completed tasks!"
+                FilterOptions.ALL -> stringResource(id = R.string.filter_option_all_no_tasks_message)
+                FilterOptions.ACTIVE -> stringResource(id = R.string.filter_option_active_no_active_tasks_message)
+                FilterOptions.COMPLETED -> stringResource(id = R.string.filter_option_completed_no_completed_tasks_message)
             },
             style = MaterialTheme.typography.h5
         )
@@ -119,9 +122,9 @@ fun TasksContent(
         ) {
             Text(
                 text = when (filterOption) {
-                    FilterOptions.ALL -> "All tasks"
-                    FilterOptions.ACTIVE -> "Active tasks"
-                    FilterOptions.COMPLETED -> "Completed tasks"
+                    FilterOptions.ALL -> stringResource(id = R.string.filter_option_all_title)
+                    FilterOptions.ACTIVE -> stringResource(id = R.string.filter_option_active_title)
+                    FilterOptions.COMPLETED -> stringResource(id = R.string.filter_option_completed_title)
                 },
                 style = MaterialTheme.typography.h6,
                 modifier = Modifier.padding(start = 16.dp)
@@ -161,7 +164,11 @@ fun TaskItem(
             onCheckedChange = {
                 onCompleteChange(task)
             },
-            modifier = Modifier.padding(8.dp)
+            modifier = Modifier
+                .padding(8.dp)
+                .semantics {
+                    contentDescription = task.taskId
+                }
         )
         Text(text = task.taskName)
     }
@@ -206,7 +213,7 @@ fun MoreMenuItem(
     }
     TopAppBarMenuItem(
         topBarIcon = {
-            Icon(Icons.Filled.MoreVert, "more")
+            Icon(Icons.Filled.MoreVert, stringResource(id = R.string.all_tasks_clear_completed_option))
         },
         onShowMenu = {
             isMenuExpanded = true
@@ -220,7 +227,7 @@ fun MoreMenuItem(
             onClearCompletedTasks()
             isMenuExpanded = false
         }) {
-            Text(text = "Clear completed")
+            Text(text = stringResource(id = R.string.all_tasks_clear_completed_option_title))
         }
     }
 }
@@ -242,7 +249,7 @@ fun FilterMenuItem(
     }
     TopAppBarMenuItem(
         topBarIcon = {
-            Icon(painterResource(id = R.drawable.ic_filter_list), "filter")
+            Icon(painterResource(id = R.drawable.ic_filter_list), stringResource(id = R.string.all_tasks_filter_option))
         },
         onShowMenu = {
             isMenuExpanded = true
@@ -259,7 +266,7 @@ fun FilterMenuItem(
             },
         ) {
             Text(
-                text = "All",
+                text = stringResource(id = R.string.filter_option_all),
                 modifier = Modifier.alpha(
                     getMenuItemAlphaByFilter(
                         currentFilterOptions = filterOption,
@@ -275,7 +282,7 @@ fun FilterMenuItem(
             }
         ) {
             Text(
-                text = "Active",
+                text = stringResource(id = R.string.filter_option_active),
                 modifier = Modifier.alpha(
                     getMenuItemAlphaByFilter(
                         currentFilterOptions = filterOption,
@@ -291,7 +298,7 @@ fun FilterMenuItem(
             }
         ) {
             Text(
-                text = "Completed",
+                text = stringResource(id = R.string.filter_option_completed),
                 modifier = Modifier.alpha(
                     getMenuItemAlphaByFilter(
                         currentFilterOptions = filterOption,
