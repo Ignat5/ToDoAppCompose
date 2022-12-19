@@ -69,6 +69,9 @@ android {
 
 dependencies {
 
+    //arch
+    testImplementation "androidx.arch.core:core-testing:$archTestingVersion"
+
     //compose - test
 
     // Test rules and transitive dependencies:
