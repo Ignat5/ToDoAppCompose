@@ -86,10 +86,7 @@ fun AddEditScreenContent(
             value = taskTitle,
             onValueChange = onTitleChange,
             modifier = Modifier
-                .fillMaxWidth()
-                .semantics {
-                    contentDescription = "my content description"
-                },
+                .fillMaxWidth(),
             label = {
                 Text(text = stringResource(R.string.input_task_name_label))
             },

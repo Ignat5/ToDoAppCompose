@@ -1,6 +1,7 @@
 package com.example.todoappcompose.di.modules
 
 import android.content.Context
+import android.util.Log
 import androidx.room.Room
 import com.example.todoappcompose.data.db.dao.TasksDao
 import com.example.todoappcompose.data.db.database.AppDatabase
@@ -28,6 +29,7 @@ object RepositoryModule {
     @Singleton
     @Provides
     fun provideTasksRepository(tasksDao: TasksDao): TasksRepository {
+        Log.d("myTag", "DataSourceModule: provideTasksRepository...")
         return TasksRepositoryImpl(tasksDao)
     }
 }
@@ -38,6 +40,7 @@ object DataSourceModule {
     @Singleton
     @Provides
     fun provideTasksDao(@ApplicationContext applicationContent: Context): TasksDao {
+        Log.d("myTag", "DataSourceModule: provideTaskDao...")
         val db = Room.databaseBuilder(
             applicationContent,
             AppDatabase::class.java,

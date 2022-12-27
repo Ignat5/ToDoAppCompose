@@ -46,7 +46,7 @@ fun DetailTaskScreen(
                     onEditClicked(it.taskId)
                 }
             }) {
-                Icon(Icons.Filled.Edit, "edit")
+                Icon(Icons.Filled.Edit, stringResource(id = R.string.common_edit_task_description))
             }
         }
     ) { paddingValues ->
@@ -123,7 +123,7 @@ fun DetailScreenTopAppBar(
         },
         navigationIcon = {
             IconButton(onClick = onBackPressed) {
-                Icon(Icons.Filled.ArrowBack, "back")
+                Icon(Icons.Filled.ArrowBack, stringResource(id = R.string.common_back_description))
             }
         },
         actions = {
@@ -146,7 +146,11 @@ fun DetailScreenContent(
             .padding(horizontal = 24.dp, vertical = 16.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Checkbox(checked = task.isDone, onCheckedChange = { onCheckUncheckClick() })
+        Checkbox(
+            checked = task.isDone,
+            onCheckedChange = { onCheckUncheckClick() },
+            modifier = Modifier.semantics { contentDescription = task.taskId }
+        )
         Column {
             Text(text = task.taskName)
             if (task.taskDescription.isNotBlank())

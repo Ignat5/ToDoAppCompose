@@ -339,6 +339,6 @@ fun AddTaskFloatingActionButton(onAddToDoClick: () -> Unit) {
     FloatingActionButton(
         onClick = onAddToDoClick,
     ) {
-        Icon(imageVector = Icons.Default.Add, contentDescription = "Add")
+        Icon(imageVector = Icons.Default.Add, contentDescription = stringResource(id = R.string.common_add_new_task_description))
     }
 }

@@ -1,5 +1,6 @@
 package com.example.todoappcompose.ui.screens.all_tasks
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.todoappcompose.data.db.entities.TaskEntity
@@ -19,6 +20,10 @@ class AllTasksViewModel @Inject constructor(
     private val tasksRepository: TasksRepository,
     private val localStoreRepository: LocalStoreRepository
 ) : ViewModel() {
+
+    init {
+        Log.d("myTag", "init: AllTasksViewModel...")
+    }
 
     private val filterOptionsFlow = localStoreRepository.getFilterOptionsFlow()
 

@@ -20,6 +20,7 @@ android {
         vectorDrawables {
             useSupportLibrary true
         }
+        testInstrumentationRunner = "com.example.todoappcompose.CustomTestRunner"
     }
 
     buildTypes {
@@ -65,9 +66,23 @@ android {
     kapt {
         correctErrorTypes true
     }
+
+    android {
+        sourceSets {
+            String sharedTestPath = "src/sharedTest/java"
+            test {
+                java.srcDirs += sharedTestPath
+            }
+            androidTest {
+                java.srcDirs += sharedTestPath
+            }
+        }
+    }
 }
 
 dependencies {
+    implementation 'androidx.test:runner:1.5.1'
+
 
     //arch
     testImplementation "androidx.arch.core:core-testing:$archTestingVersion"
@@ -88,8 +103,6 @@ dependencies {
     // ...with Java.
     testAnnotationProcessor("com.google.dagger:hilt-android-compiler:2.44")
 
-    //
-
     // For instrumented tests.
     androidTestImplementation("com.google.dagger:hilt-android-testing:2.44")
     // ...with Kotlin.
@@ -99,7 +112,7 @@ dependencies {
     implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.3.1'
     implementation 'androidx.compose.material:material:1.1.1'
     testImplementation 'junit:junit:4.13.2'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.0'
+//    androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.0'
     testImplementation "org.hamcrest:hamcrest-all:$hamcrestVersion"
     // AndroidX Test - JVM testing
     testImplementation "androidx.test.ext:junit-ktx:$androidXTestExtKotlinRunnerVersion"
@@ -109,6 +122,7 @@ dependencies {
     implementation "androidx.test:core:$androidXTestCoreVersion"
     //Truth
     testImplementation "com.google.truth:truth:$truthVersion"
+    androidTestImplementation "com.google.truth:truth:$truthVersion"
 
     // Jetpack Compose
     implementation "androidx.activity:activity-compose:$activityComposeVersion"

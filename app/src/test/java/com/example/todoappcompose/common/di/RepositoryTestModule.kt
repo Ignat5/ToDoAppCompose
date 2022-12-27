@@ -1,5 +1,6 @@
 package com.example.todoappcompose.common.di
 
+import android.util.Log
 import com.example.todoappcompose.common.data.FakeLocalStoreRepository
 import com.example.todoappcompose.common.repository.FakeTasksRepository
 import com.example.todoappcompose.data.repositories.local.LocalStoreRepository
@@ -21,6 +22,7 @@ object RepositoryTestModule {
     @Singleton
     @Provides
     fun provideTestTasksRepository(): TasksRepository {
+        Log.d("myTag", "DataSourceModule: provideTestTasksRepository...")
         return FakeTasksRepository()
     }
 

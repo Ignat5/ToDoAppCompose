@@ -8,6 +8,9 @@
     <string name="all_tasks_filter_option">Filter</string>
     <string name="all_tasks_clear_completed_option">Clear completed tasks</string>
     <string name="all_tasks_clear_completed_option_title">Clear completed</string>
+    <string name="common_back_description">Back</string>
+    <string name="common_add_new_task_description">Add new task</string>
+    <string name="common_edit_task_description">Edit task</string>
     <string name="filter_option_all">All</string>
     <string name="filter_option_active">Active</string>
     <string name="filter_option_completed">Completed</string>
