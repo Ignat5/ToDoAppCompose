@@ -11,10 +11,14 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.example.todoappcompose.R
 import com.example.todoappcompose.data.db.entities.TaskEntity
 
 @OptIn(ExperimentalLifecycleComposeApi::class)
@@ -42,7 +46,7 @@ fun DetailTaskScreen(
                     onEditClicked(it.taskId)
                 }
             }) {
-                Icon(Icons.Filled.Edit, "edit")
+                Icon(Icons.Filled.Edit, stringResource(id = R.string.common_edit_task_description))
             }
         }
     ) { paddingValues ->
@@ -94,17 +98,17 @@ fun ConfirmDeletionDialog(
             ) {
                 Button(onClick = onDeleteConfirmed) {
                     Text(
-                        text = "Yes",
+                        text = stringResource(id = R.string.common_yes_option),
                         modifier = Modifier
                     )
                 }
                 Spacer(modifier = Modifier.padding(horizontal = 8.dp))
                 Button(onClick = onDismissDialog) {
-                    Text(text = "No")
+                    Text(text = stringResource(id = R.string.common_no_option))
                 }
                 Spacer(modifier = Modifier.padding(horizontal = 8.dp))
             }
-        }
+        },
     )
 }
 
@@ -119,12 +123,12 @@ fun DetailScreenTopAppBar(
         },
         navigationIcon = {
             IconButton(onClick = onBackPressed) {
-                Icon(Icons.Filled.ArrowBack, "back")
+                Icon(Icons.Filled.ArrowBack, stringResource(id = R.string.common_back_description))
             }
         },
         actions = {
             IconButton(onClick = onDeleteTaskClick) {
-                Icon(Icons.Filled.Delete, "delete")
+                Icon(Icons.Filled.Delete, stringResource(id = R.string.detail_task_delete_task))
             }
         }
     )
@@ -142,7 +146,11 @@ fun DetailScreenContent(
             .padding(horizontal = 24.dp, vertical = 16.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Checkbox(checked = task.isDone, onCheckedChange = { onCheckUncheckClick() })
+        Checkbox(
+            checked = task.isDone,
+            onCheckedChange = { onCheckUncheckClick() },
+            modifier = Modifier.semantics { contentDescription = task.taskId }
+        )
         Column {
             Text(text = task.taskName)
             if (task.taskDescription.isNotBlank())

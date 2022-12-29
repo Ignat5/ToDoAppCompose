@@ -18,8 +18,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class AddEditTaskViewModel @Inject constructor(
-    savedStateHandle: SavedStateHandle,
-    private val repository: TasksRepository
+    private val repository: TasksRepository,
+    savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
     private val taskId: String? = savedStateHandle[NavArg.ARG_TASK_ID]
